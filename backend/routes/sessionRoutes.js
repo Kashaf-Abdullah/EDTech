@@ -1,0 +1,2 @@
+const router=require('express').Router(),{protect}=require('../middleware/auth'),{bookSession,getMySessionsAsStudent,getMySessionsAsTutor,updateSession}=require('../controllers/sessionController');
+router.post('/',protect,bookSession);router.get('/student',protect,getMySessionsAsStudent);router.get('/tutor',protect,getMySessionsAsTutor);router.patch('/:id',protect,updateSession);module.exports=router;

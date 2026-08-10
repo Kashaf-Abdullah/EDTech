@@ -1,0 +1,124 @@
+/* ============================================================
+   EDUPAK THEME — change values here to re-theme the whole app
+   ============================================================ */
+:root {
+  /* Brand colors */
+  --color-primary:       #4F6BFF;
+  --color-primary-dark:  #3B52E0;
+  --color-primary-light: #EEF1FF;
+  --color-accent:        #22C55E;   /* success / progress */
+  --color-accent-light:  #E8FBF0;
+  --color-warning:       #F5A524;
+  --color-warning-light: #FEF3E2;
+  --color-danger:        #EF4444;
+  --color-danger-light:  #FDEDED;
+  --color-info:          #3ABFF8;
+  --color-info-light:    #EAF8FE;
+
+  /* Neutrals */
+  --color-bg:            #F6F7FB;
+  --color-surface:       #FFFFFF;
+  --color-surface-alt:   #F1F3F9;
+  --color-border:        #E6E8F0;
+  --color-ink:           #1A1D29;
+  --color-ink-soft:      #4B5066;
+  --color-muted:         #8A8FA3;
+
+  /* Sidebar (can differ from main surface for contrast) */
+  --sidebar-bg:          #161A2E;
+  --sidebar-ink:         #C7CBE0;
+  --sidebar-ink-active:  #FFFFFF;
+  --sidebar-hover:       #232A47;
+
+  /* Typography */
+  --font-display: 'Outfit', 'Segoe UI', sans-serif;
+  --font-body:    'Inter', 'Segoe UI', sans-serif;
+
+  /* Radius & shadow */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(20, 24, 50, 0.04), 0 1px 1px rgba(20,24,50,0.03);
+  --shadow-md: 0 4px 16px rgba(20, 24, 50, 0.08);
+  --shadow-lg: 0 12px 32px rgba(20, 24, 50, 0.12);
+
+  --sidebar-width: 260px;
+  --topbar-height: 68px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* Scrollbar polish */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
+
+/* Bootstrap overrides — keep using bootstrap classes but recolor them to theme */
+.btn-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+.btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-outline-primary:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.text-primary { color: var(--color-primary) !important; }
+.bg-primary { background: var(--color-primary) !important; }
+.border-primary { border-color: var(--color-primary) !important; }
+
+.btn {
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  padding: 0.5rem 1.1rem;
+}
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.form-control, .form-select {
+  border-radius: var(--radius-sm);
+  border-color: var(--color-border);
+  padding: 0.55rem 0.85rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+.badge { font-weight: 500; border-radius: 6px; }
+
+/* Utility classes used across new layout components */
+.surface { background: var(--color-surface); border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+.text-muted-soft { color: var(--color-muted); }
+.shadow-soft { box-shadow: var(--shadow-sm); }
+.shadow-elevated { box-shadow: var(--shadow-md); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

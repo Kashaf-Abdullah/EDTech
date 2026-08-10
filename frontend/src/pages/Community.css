@@ -1,0 +1,109 @@
+.community-shell {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--topbar-height) - 56px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.community-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.community-header-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-primary), #8B5CF6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.community-header h3 { font-size: 15px; margin: 0; }
+.community-header span { font-size: 12px; color: var(--color-muted); }
+
+.community-notice-bar {
+  padding: 8px 20px;
+  font-size: 12.5px;
+  text-align: center;
+  background: var(--color-warning-light);
+  color: #92600A;
+}
+.community-notice-info {
+  background: var(--color-info-light);
+  color: #0C5C7E;
+}
+
+.community-feed { flex: 1; overflow-y: auto; padding: 18px 20px; background: var(--color-bg); }
+.community-empty { text-align: center; color: var(--color-muted); padding: 60px 0; }
+
+.community-msg-row { display: flex; margin-bottom: 16px; }
+.community-msg-row.mine { justify-content: flex-end; }
+.community-msg-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+.community-msg-block { max-width: 65%; }
+.community-msg-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; margin-left: 44px; }
+.community-msg-name { font-size: 12.5px; font-weight: 600; }
+.community-role-badge { font-size: 9.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; color: #fff; }
+
+.community-msg-with-avatar { display: flex; gap: 10px; align-items: flex-start; }
+.community-msg-bubble {
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+.community-msg-bubble.theirs { background: var(--color-surface); border: 1px solid var(--color-border); border-top-left-radius: 4px; }
+.community-msg-bubble.mine { background: var(--color-primary); color: #fff; border-top-right-radius: 4px; }
+.community-msg-masked-note { font-size: 11px; margin-top: 4px; opacity: 0.8; }
+.community-msg-time { font-size: 10px; margin-top: 4px; text-align: right; opacity: 0.6; }
+
+.community-reactions { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; align-items: center; margin-left: 44px; }
+.community-reaction-chip {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.community-reaction-chip.mine { background: var(--color-primary-light); border-color: var(--color-primary); color: var(--color-primary); }
+.community-add-reaction-wrap { position: relative; }
+.community-add-reaction-btn {
+  border: none;
+  background: var(--color-surface-alt);
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 11px;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.community-emoji-picker {
+  position: absolute;
+  top: 110%; left: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  padding: 5px;
+  display: flex;
+  gap: 4px;
+  z-index: 20;
+}
+.community-emoji-picker button { background: none; border: none; font-size: 17px; padding: 2px 4px; cursor: pointer; }
+
+.community-input-row { padding: 14px; border-top: 1px solid var(--color-border); display: flex; gap: 10px; }
+.community-input-row input {
+  flex: 1; border: 1px solid var(--color-border); border-radius: 999px;
+  padding: 10px 16px; font-size: 13.5px; outline: none;
+}
+.community-input-row input:focus { border-color: var(--color-primary); }
+.community-send-btn {
+  background: var(--color-primary); color: #fff; border: none;
+  border-radius: 50%; width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+}

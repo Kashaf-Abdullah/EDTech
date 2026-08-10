@@ -1,0 +1,12 @@
+const router=require('express').Router(),{protect,authorize}=require('../middleware/auth'),{uploadThumbnail}=require('../config/cloudinary'),multer=require('multer'),c=require('../controllers/courseController');
+const lessonUpload=multer({storage:require('../config/cloudinary').uploadVideo.storage,limits:{fileSize:500*1024*1024}});
+router.get('/',c.getCourses);router.get('/my',protect,authorize('tutor'),c.getMyCourses);router.get('/:id',c.getCourseById);
+router.post('/',protect,authorize('tutor'),uploadThumbnail.single('thumbnail'),c.createCourse);
+router.put('/:id',protect,authorize('tutor','admin'),uploadThumbnail.single('thumbnail'),c.updateCourse);
+router.delete('/:id',protect,authorize('tutor'),c.deleteCourse);
+router.patch('/:id/publish',protect,authorize('tutor'),c.togglePublish);
+router.post('/:id/sections',protect,authorize('tutor'),c.addSection);
+router.post('/:id/lessons',protect,authorize('tutor'),lessonUpload.single('file'),c.addLesson);
+router.delete('/:id/lessons/:lessonId',protect,authorize('tutor'),c.deleteLesson);
+router.get('/:id/students',protect,authorize('tutor','admin'),c.getEnrolledStudents);
+module.exports=router;
