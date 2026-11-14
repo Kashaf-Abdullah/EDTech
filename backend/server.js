@@ -43,7 +43,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB connected');
     server.listen(process.env.PORT || 5000, () =>
-      console.log(`Server + Socket.io on port ${process.env.PORT || 5000}`)
+      console.log(`Server + Socket.io on port -> rocess.env.PORT || 5000}`)
     );
   })
   .catch(err => { console.error('DB Error:', err); process.exit(1); });
