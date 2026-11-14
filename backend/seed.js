@@ -4,6 +4,19 @@ require('dotenv').config();
 
 async function seed() {
   try {
+    const seedPasswords = {
+      admin: process.env.SEED_ADMIN_PASSWORD,
+      tutor: process.env.SEED_TUTOR_PASSWORD,
+      student: process.env.SEED_STUDENT_PASSWORD,
+    };
+    const invalidSeedPasswords = Object.entries(seedPasswords)
+      .filter(([, password]) => !password || password.length < 12)
+      .map(([role]) => `SEED_${role.toUpperCase()}_PASSWORD`);
+
+    if (invalidSeedPasswords.length) {
+      throw new Error(`Set ${invalidSeedPasswords.join(', ')} to at least 12 characters before seeding.`);
+    }
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log('\n🔌 MongoDB connected\n');
 
@@ -14,12 +27,12 @@ async function seed() {
     console.log('🗑️  Collections cleared\n');
 
     const users = [
-      { name:'Super Admin',  email:'admin@edupak.com',   password:'admin123',   role:'admin',   isVerified:true, approvalStatus:'approved', isBanned:false },
-      { name:'Ali Hassan',   email:'ali@edupak.com',     password:'tutor123',   role:'tutor',   isVerified:true, approvalStatus:'approved', isBanned:false, bio:'Mathematics aur Physics ka 8 saal ka experience.', subjects:['Math','Physics'], experience:'8 years teaching', profilePic:'https://api.dicebear.com/7.x/avataaars/svg?seed=ali', totalEarnings:0, pendingPayout:0 },
-      { name:'Sara Khan',    email:'sara@edupak.com',    password:'tutor123',   role:'tutor',   isVerified:true, approvalStatus:'approved', isBanned:false, bio:'IELTS aur English specialist. 500+ students.', subjects:['English','IELTS'], experience:'6 years IELTS trainer', profilePic:'https://api.dicebear.com/7.x/avataaars/svg?seed=sara', totalEarnings:0, pendingPayout:0 },
-      { name:'Usman Tariq',  email:'usman@edupak.com',   password:'tutor123',   role:'tutor',   isVerified:true, approvalStatus:'approved', isBanned:false, bio:'Full Stack Developer aur CS instructor.', subjects:['Coding','Python'], experience:'5 years industry + 3 years teaching', profilePic:'https://api.dicebear.com/7.x/avataaars/svg?seed=usman', totalEarnings:0, pendingPayout:0 },
-      { name:'Hamza Rauf',   email:'hamza@student.com',  password:'student123', role:'student', isVerified:true, approvalStatus:'approved', isBanned:false },
-      { name:'Ayesha Malik', email:'ayesha@student.com', password:'student123', role:'student', isVerified:true, approvalStatus:'approved', isBanned:false },
+      { name:'Super Admin',  email:'admin@edupak.com',   password:seedPasswords.admin,   role:'admin',   isVerified:true, approvalStatus:'approved', isBanned:false },
+      { name:'Ali Hassan',   email:'ali@edupak.com',     password:seedPasswords.tutor,   role:'tutor',   isVerified:true, approvalStatus:'approved', isBanned:false, bio:'Mathematics aur Physics ka 8 saal ka experience.', subjects:['Math','Physics'], experience:'8 years teaching', profilePic:'https://api.dicebear.com/7.x/avataaars/svg?seed=ali', totalEarnings:0, pendingPayout:0 },
+      { name:'Sara Khan',    email:'sara@edupak.com',    password:seedPasswords.tutor,   role:'tutor',   isVerified:true, approvalStatus:'approved', isBanned:false, bio:'IELTS aur English specialist. 500+ students.', subjects:['English','IELTS'], experience:'6 years IELTS trainer', profilePic:'https://api.dicebear.com/7.x/avataaars/svg?seed=sara', totalEarnings:0, pendingPayout:0 },
+      { name:'Usman Tariq',  email:'usman@edupak.com',   password:seedPasswords.tutor,   role:'tutor',   isVerified:true, approvalStatus:'approved', isBanned:false, bio:'Full Stack Developer aur CS instructor.', subjects:['Coding','Python'], experience:'5 years industry + 3 years teaching', profilePic:'https://api.dicebear.com/7.x/avataaars/svg?seed=usman', totalEarnings:0, pendingPayout:0 },
+      { name:'Hamza Rauf',   email:'hamza@student.com',  password:seedPasswords.student, role:'student', isVerified:true, approvalStatus:'approved', isBanned:false },
+      { name:'Ayesha Malik', email:'ayesha@student.com', password:seedPasswords.student, role:'student', isVerified:true, approvalStatus:'approved', isBanned:false },
     ];
 
     // Insert one-by-one using insertOne — avoids insertMany's iterable/destructuring issues entirely
@@ -261,12 +274,10 @@ async function seed() {
 
     console.log('\n' + '═'.repeat(52));
     console.log('🎉  SEED COMPLETE!\n');
-    console.log('  🛡️  admin@edupak.com     / admin123');
-    console.log('  👨‍🏫 ali@edupak.com       / tutor123  (Math & Physics)');
-    console.log('  👨‍🏫 sara@edupak.com      / tutor123  (IELTS & English)');
-    console.log('  👨‍🏫 usman@edupak.com     / tutor123  (Coding & Python)');
-    console.log('  👨‍🎓 hamza@student.com    / student123');
-    console.log('  👨‍🎓 ayesha@student.com   / student123');
+    console.log('  Admin: admin@edupak.com');
+    console.log('  Tutors: ali@edupak.com, sara@edupak.com, usman@edupak.com');
+    console.log('  Students: hamza@student.com, ayesha@student.com');
+    console.log('  Passwords are configured with SEED_ADMIN_PASSWORD, SEED_TUTOR_PASSWORD, and SEED_STUDENT_PASSWORD.');
     console.log('\n  📚 5 courses created (approved + published)');
     console.log('  🧠 5 entry tests created (ECAT + MCAT)');
     console.log('═'.repeat(52) + '\n');

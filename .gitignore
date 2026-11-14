@@ -3,7 +3,7 @@ backend/node_modules/
 frontend/node_modules/
 
 /{backend}
-.env.example 
+.env.example
 /node_modules/
 
 .env
@@ -11,6 +11,8 @@ frontend/node_modules/
 /frontend/.env
 /backend/node_modules
 /frotend/node_modules
+!backend/.env.example
+!frontend/.env.example
 ./backend/.env
 /frontend/.env
 ./backend/node_modules

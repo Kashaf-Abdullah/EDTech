@@ -11,7 +11,7 @@
 cd backend
 npm install
 cp .env.example .env
-# Fill in .env values
+# Replace the placeholder values in .env
 node server.js
 ```
 
@@ -19,24 +19,26 @@ node server.js
 ```bash
 cd frontend
 npm install
+cp .env.example .env
 npm start
 ```
+The frontend env file contains public API/socket URLs only. Never put passwords,
+API keys, or other secrets in frontend environment variables; React embeds them
+in the browser build.
 
 ### Seed Demo Data
+Set `SEED_ADMIN_PASSWORD`, `SEED_TUTOR_PASSWORD`, and `SEED_STUDENT_PASSWORD`
+in `backend/.env` to unique passwords of at least 12 characters before seeding.
+All seed accounts in the same role use that role's configured password.
 ```bash
 cd backend
 node seed.js
 ```
 
-## Login Credentials (after seed)
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@edupak.com | admin123 |
-| Tutor | ali@edupak.com | tutor123 |
-| Tutor | sara@edupak.com | tutor123 |
-| Tutor | usman@edupak.com | tutor123 |
-| Student | hamza@student.com | student123 |
-| Student | ayesha@student.com | student123 |
+## Seeded Login Emails
+- Admin: `admin@edupak.com`
+- Tutors: `ali@edupak.com`, `sara@edupak.com`, `usman@edupak.com`
+- Students: `hamza@student.com`, `ayesha@student.com`
 
 ## Features
 ### Student
