@@ -16,9 +16,9 @@ const emptyForm = {
 
 export default function AdminEntryTests() {
   const dispatch = useDispatch();
-  const { adminTests, unlockRequests, selectedTest } = useSelector(s => s.entryTest);
+  const { adminTests, unlockRequests, selectedTest, error, notice } = useSelector(s => s.entryTest);
   const [form, setForm] = useState(emptyForm);
-  const [reviewNote, setReviewNote] = useState('');
+  const [reviewNotes, setReviewNotes] = useState({});
   const [editingTestId, setEditingTestId] = useState(null);
 
   useEffect(() => {
@@ -110,9 +110,10 @@ export default function AdminEntryTests() {
   };
 
   const handleReview = async (id, action) => {
-    const result = await dispatch(reviewEntryTestUnlock({ id, action, note: reviewNote }));
+    const note = reviewNotes[id] || '';
+    const result = await dispatch(reviewEntryTestUnlock({ id, action, note }));
     if (!result.error) {
-      setReviewNote('');
+      setReviewNotes(prev => ({ ...prev, [id]: '' }));
       dispatch(fetchEntryTestUnlockRequests());
     }
   };
@@ -120,6 +121,8 @@ export default function AdminEntryTests() {
   return (
     <div className="container py-4">
       <h3 className="mb-3">Entry Test Management</h3>
+      {notice ? <div className="alert alert-success">{notice}</div> : null}
+      {error ? <div className="alert alert-danger">{error}</div> : null}
       <div className="row g-4">
         <div className="col-lg-7">
           <div className="card shadow-sm">
@@ -218,8 +221,25 @@ export default function AdminEntryTests() {
                         </div>
                         <span className="badge bg-warning text-dark">Pending</span>
                       </div>
-                      <div className="small text-muted mt-2">Amount: PKR {req.amount}</div>
-                      <textarea className="form-control mt-2" rows="2" value={reviewNote} onChange={e => setReviewNote(e.target.value)} placeholder="Optional note" />
+                      <div className="small text-muted mt-2">
+                        Amount: PKR {req.amount?.toLocaleString()}
+                        {req.bankName ? <> • 🏦 {req.bankName}</> : null}
+                        {req.transactionId ? <> • TXN: {req.transactionId}</> : null}
+                      </div>
+                      {req.screenshotUrl ? (
+                        <div className="mt-2">
+                          <a href={req.screenshotUrl} target="_blank" rel="noopener noreferrer">
+                            <img src={req.screenshotUrl} alt="Payment Screenshot" className="img-thumbnail" style={{ maxHeight: 150 }} />
+                          </a>
+                        </div>
+                      ) : null}
+                      <textarea
+                        className="form-control mt-2"
+                        rows="2"
+                        value={reviewNotes[req._id] || ''}
+                        onChange={e => setReviewNotes(prev => ({ ...prev, [req._id]: e.target.value }))}
+                        placeholder="Optional note"
+                      />
                       <div className="d-flex gap-2 mt-2">
                         <button className="btn btn-sm btn-success" onClick={() => handleReview(req._id, 'approve')}>Approve</button>
                         <button className="btn btn-sm btn-outline-danger" onClick={() => handleReview(req._id, 'reject')}>Reject</button>

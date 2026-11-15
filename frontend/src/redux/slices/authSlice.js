@@ -14,7 +14,9 @@ const authSlice = createSlice({
     b.addCase(registerUser.pending, s=>{s.loading=true;s.error=null;}).addCase(registerUser.rejected,(s,{payload})=>{s.loading=false;s.error=payload;}).addCase(registerUser.fulfilled,ok)
      .addCase(loginUser.pending,    s=>{s.loading=true;s.error=null;}).addCase(loginUser.rejected,   (s,{payload})=>{s.loading=false;s.error=payload;}).addCase(loginUser.fulfilled,ok)
      .addCase(fetchMe.fulfilled,    (s,{payload})=>{ s.user=payload.user; localStorage.setItem('user',JSON.stringify(payload.user)); })
-     .addCase(updateMyProfile.fulfilled,(s,{payload})=>{ s.user=payload.user; localStorage.setItem('user',JSON.stringify(payload.user)); });
+     .addCase(updateMyProfile.pending,  s=>{ s.loading=true; s.error=null; })
+     .addCase(updateMyProfile.rejected, (s,{payload})=>{ s.loading=false; s.error=payload||'Failed to update profile'; })
+     .addCase(updateMyProfile.fulfilled,(s,{payload})=>{ s.loading=false; s.user=payload.user; localStorage.setItem('user',JSON.stringify(payload.user)); });
   }
 });
 export const { logout, clearError, setCredentials } = authSlice.actions;

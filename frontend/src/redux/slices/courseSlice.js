@@ -16,11 +16,11 @@ const s = createSlice({ name:'course', initialState:{courses:[],myCourses:[],sel
     b.addCase(fetchCourses.pending,  s=>{s.loading=true;}).addCase(fetchCourses.fulfilled,(s,{payload})=>{s.loading=false;s.courses=payload.courses;s.total=payload.total;s.pages=payload.pages;}).addCase(fetchCourses.rejected,(s,{payload})=>{s.loading=false;s.error=payload;})
      .addCase(fetchCourseById.pending,s=>{s.loading=true;}).addCase(fetchCourseById.fulfilled,(s,{payload})=>{s.loading=false;s.selected=payload;}).addCase(fetchCourseById.rejected,(s,{payload})=>{s.loading=false;s.error=payload;})
      .addCase(fetchMyCourses.fulfilled,(s,{payload})=>{s.myCourses=payload;})
-     .addCase(createCourse.fulfilled,(s,{payload})=>{s.myCourses.unshift(payload);})
-     .addCase(updateCourse.fulfilled,(s,{payload})=>{s.myCourses=s.myCourses.map(c=>c._id===payload._id?payload:c);if(s.selected?._id===payload._id)s.selected=payload;})
-     .addCase(deleteCourse.fulfilled,(s,{payload})=>{s.myCourses=s.myCourses.filter(c=>c._id!==payload);})
+     .addCase(createCourse.pending,s=>{s.loading=true;s.error=null;}).addCase(createCourse.rejected,(s,{payload})=>{s.loading=false;s.error=payload||'Failed to create course';}).addCase(createCourse.fulfilled,(s,{payload})=>{s.loading=false;s.myCourses.unshift(payload);})
+     .addCase(updateCourse.pending,s=>{s.loading=true;s.error=null;}).addCase(updateCourse.rejected,(s,{payload})=>{s.loading=false;s.error=payload||'Failed to update course';}).addCase(updateCourse.fulfilled,(s,{payload})=>{s.loading=false;s.myCourses=s.myCourses.map(c=>c._id===payload._id?payload:c);if(s.selected?._id===payload._id)s.selected=payload;})
+     .addCase(deleteCourse.rejected,(s,{payload})=>{s.error=payload||'Failed to delete course';}).addCase(deleteCourse.fulfilled,(s,{payload})=>{s.myCourses=s.myCourses.filter(c=>c._id!==payload);})
      .addCase(togglePublish.fulfilled,(s,{payload})=>{const c=s.myCourses.find(c=>c._id===payload.id);if(c)c.isPublished=payload.isPublished;})
-     .addCase(addLesson.fulfilled,(s,{payload})=>{s.selected=payload;const i=s.myCourses.findIndex(c=>c._id===payload._id);if(i>-1)s.myCourses[i]=payload;})
+     .addCase(addLesson.pending,s=>{s.error=null;}).addCase(addLesson.rejected,(s,{payload})=>{s.error=payload||'Failed to add lesson';}).addCase(addLesson.fulfilled,(s,{payload})=>{s.selected=payload;const i=s.myCourses.findIndex(c=>c._id===payload._id);if(i>-1)s.myCourses[i]=payload;})
      .addCase(fetchReviews.fulfilled,(s,{payload})=>{s.reviews=payload;})
      .addCase(addReview.fulfilled,(s,{payload})=>{s.reviews.unshift(payload);});
   }

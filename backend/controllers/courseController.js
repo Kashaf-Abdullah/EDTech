@@ -20,14 +20,21 @@ exports.getCourseById = async (req, res, next) => {
   try {
     const course = await Course.findById(req.params.id).populate('tutor','name profilePic bio subjects experience');
     if (!course) return res.status(404).json({ success:false, message:'Course not found' });
-    res.json({ success:true, course });
+    const enrolledCount = await Enrollment.countDocuments({ course: course._id });
+    res.json({ success:true, course: { ...course.toObject(), enrolledCount } });
   } catch(err) { next(err); }
 };
 
 exports.getMyCourses = async (req, res, next) => {
   try {
     const courses = await Course.find({ tutor: req.user._id }).sort('-createdAt');
-    res.json({ success:true, courses });
+    const counts = await Enrollment.aggregate([
+      { $match: { course: { $in: courses.map(c => c._id) } } },
+      { $group: { _id: '$course', count: { $sum: 1 } } },
+    ]);
+    const countMap = Object.fromEntries(counts.map(c => [c._id.toString(), c.count]));
+    const enriched = courses.map(c => ({ ...c.toObject(), enrolledCount: countMap[c._id.toString()] || 0 }));
+    res.json({ success:true, courses: enriched });
   } catch(err) { next(err); }
 };
 

@@ -36,7 +36,7 @@ export default function ManageCourse() {
 
       <ul className="nav nav-tabs mb-4">
         <li className="nav-item"><button className={`nav-link ${tab==='lessons'?'active':''}`} onClick={()=>setTab('lessons')}>📹 Lessons</button></li>
-        <li className="nav-item"><button className={`nav-link ${tab==='students'?'active':''}`} onClick={()=>setTab('students')}>👥 Students ({course.totalStudents||0})</button></li>
+        <li className="nav-item"><button className={`nav-link ${tab==='students'?'active':''}`} onClick={()=>setTab('students')}>👥 Students ({course.enrolledCount??students.length})</button></li>
       </ul>
 
       {tab==='lessons' && (
