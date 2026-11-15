@@ -4,6 +4,11 @@ import {useDispatch,useSelector} from 'react-redux';
 import {loginUser,clearError} from '../redux/slices/authSlice';
 import './AuthPages.css';
 
+const testAccount = {
+  email: 'hamza@student.com',
+  password: 'StudentPassword123!',
+};
+
 export default function Login() {
   const dispatch=useDispatch(),navigate=useNavigate(),{loading,error,user}=useSelector(s=>s.auth);
   const [f,setF]=useState({email:'',password:''});
@@ -35,6 +40,18 @@ export default function Login() {
             Log in
           </button>
         </form>
+
+        <div className="auth-demo">
+          <div>
+            <strong>Just testing?</strong>
+            <p>Use the demo student account:</p>
+            <span>{testAccount.email}</span>
+            <span>{testAccount.password}</span>
+          </div>
+          <button type="button" className="auth-demo-btn" onClick={()=>setF(testAccount)}>
+            Use test account
+          </button>
+        </div>
 
         <div className="auth-divider"><span>or</span></div>
 
