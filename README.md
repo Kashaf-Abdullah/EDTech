@@ -14,6 +14,8 @@ cp .env.example .env
 # Replace the placeholder values in .env
 node server.js
 ```
+For deployment, set `CLIENT_URL` to the frontend's origin (for example,
+`https://your-app.vercel.app`). A trailing slash is removed automatically.
 
 ### Frontend
 ```bash

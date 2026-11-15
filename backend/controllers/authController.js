@@ -84,5 +84,6 @@ exports.googleCallback = async (req, res) => {
     await req.user.save();
   }
   const token = generateToken(req.user._id);
-  res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
+  const clientUrl = process.env.CLIENT_URL?.replace(/\/+$/, '');
+  res.redirect(`${clientUrl}/oauth-success?token=${token}`);
 };

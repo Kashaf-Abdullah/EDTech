@@ -9,8 +9,9 @@ const { initSocket } = require('./config/socket');
 
 const app = express();
 const server = http.createServer(app);
+const clientUrl = process.env.CLIENT_URL?.replace(/\/+$/, '');
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ origin: clientUrl, credentials: true }));
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(passport.initialize());
@@ -37,7 +38,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ success: false, message: err.message || 'Server error' });
 });
 
-initSocket(server, process.env.CLIENT_URL);
+initSocket(server, clientUrl);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
