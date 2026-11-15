@@ -53,6 +53,28 @@ export default function Login() {
           </button>
         </div>
 
+        <div className="auth-demo">
+          <div>
+            <strong>Admin test account</strong>
+            <p>Enter the password configured as SEED_ADMIN_PASSWORD in backend .env.</p>
+            <span>admin@edupak.com</span>
+          </div>
+          <button type="button" className="auth-demo-btn" onClick={()=>setF({email:'admin@edupak.com',password:''})}>
+            Use admin email
+          </button>
+        </div>
+
+        <div className="auth-demo">
+          <div>
+            <strong>Teacher test account</strong>
+            <p>Enter the password configured as SEED_TUTOR_PASSWORD in backend .env.</p>
+            <span>ali@edupak.com</span>
+          </div>
+          <button type="button" className="auth-demo-btn" onClick={()=>setF({email:'ali@edupak.com',password:''})}>
+            Use teacher email
+          </button>
+        </div>
+
         <div className="auth-divider"><span>or</span></div>
 
         <a href={`${(process.env.REACT_APP_API_URL || '/api').replace(/\/+$/, '')}/auth/google`} className="auth-google-btn">
