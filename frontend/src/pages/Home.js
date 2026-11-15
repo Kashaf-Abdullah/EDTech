@@ -36,7 +36,7 @@ export default function Home() {
         <div className="home-features-inner">
           {[
             { icon: '🎓', title: 'Expert Tutors', desc: 'Verified, approved tutors across every subject.' },
-            { icon: '💳', title: 'Easy Payment', desc: 'JazzCash, EasyPaisa, bank transfer, or card.' },
+            { icon: '💳', title: 'Easy Payment', desc: 'JazzCash, EasyPaisa, or bank transfer.' },
             { icon: '📜', title: 'Certificates', desc: 'Earn a verifiable certificate after every course.' },
             { icon: '🔴', title: 'Live Sessions', desc: 'Book 1-on-1 time with your favourite tutor.' },
           ].map(f => (

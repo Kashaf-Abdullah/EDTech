@@ -11,7 +11,9 @@ const s = createSlice({ name:'tutor', initialState:{stats:null,profile:null,sess
   extraReducers:b=>{
     b.addCase(fetchTutorStats.fulfilled,   (s,{payload})=>{s.stats=payload;})
      .addCase(fetchTutorProfile.fulfilled, (s,{payload})=>{s.profile=payload;})
-     .addCase(updateTutorProfile.fulfilled,(s,{payload})=>{s.profile=payload;})
+     .addCase(updateTutorProfile.pending,  s=>{s.loading=true;s.error=null;})
+     .addCase(updateTutorProfile.rejected, (s,{payload})=>{s.loading=false;s.error=payload||'Failed to update profile';})
+     .addCase(updateTutorProfile.fulfilled,(s,{payload})=>{s.loading=false;s.profile=payload;})
      .addCase(fetchTutorSessions.fulfilled,(s,{payload})=>{s.sessions=payload;})
      .addCase(updateSession.fulfilled,     (s,{payload})=>{s.sessions=s.sessions.map(x=>x._id===payload._id?payload:x);})
      .addCase(fetchEarnings.fulfilled,     (s,{payload})=>{s.earnings=payload;});

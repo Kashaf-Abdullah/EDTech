@@ -9,6 +9,7 @@ export const fetchAdminCourses = createAsyncThunk('admin/courses',  async(a='fal
 export const approveCourse     = createAsyncThunk('admin/appCourse',async(id,{rejectWithValue})=>{ try{await API.patch(`/admin/courses/${id}/approve`);return id;}catch(e){return rejectWithValue(e.response?.data?.message);}});
 export const featureCourse     = createAsyncThunk('admin/featCourse',async(id,{rejectWithValue})=>{ try{return (await API.patch(`/admin/courses/${id}/feature`)).data;}catch(e){return rejectWithValue(e.response?.data?.message);}});
 export const banUser           = createAsyncThunk('admin/ban',      async(id,{rejectWithValue})=>{ try{await API.patch(`/admin/users/${id}/ban`);return id;}catch(e){return rejectWithValue(e.response?.data?.message);}});
+export const unbanUser         = createAsyncThunk('admin/unban',    async(id,{rejectWithValue})=>{ try{await API.patch(`/admin/users/${id}/unban`);return id;}catch(e){return rejectWithValue(e.response?.data?.message);}});
 export const fetchPendingPay   = createAsyncThunk('admin/payments', async(_,{rejectWithValue})=>{ try{return (await API.get('/payments/admin/pending')).data.payments;}catch(e){return rejectWithValue(e.response?.data?.message);}});
 export const reviewPayment     = createAsyncThunk('admin/revPay',   async({id,action,note},{rejectWithValue})=>{ try{await API.patch(`/payments/admin/${id}`,{action,note});return id;}catch(e){return rejectWithValue(e.response?.data?.message);}});
 export const fetchRevenue      = createAsyncThunk('admin/revenue',  async(_,{rejectWithValue})=>{ try{return (await API.get('/admin/revenue')).data.payments;}catch(e){return rejectWithValue(e.response?.data?.message);}});
@@ -22,7 +23,9 @@ const s = createSlice({ name:'admin', initialState:{stats:null,users:[],tutors:[
      .addCase(rejectTutor.fulfilled,      (s,{payload})=>{s.tutors=s.tutors.filter(t=>t._id!==payload);})
      .addCase(fetchAdminCourses.fulfilled,(s,{payload})=>{s.courses=payload.courses;})
      .addCase(approveCourse.fulfilled,    (s,{payload})=>{s.courses=s.courses.filter(c=>c._id!==payload);})
-     .addCase(banUser.fulfilled,          (s,{payload})=>{s.users=s.users.filter(u=>u._id!==payload);})
+     .addCase(featureCourse.fulfilled,    (s,{payload,meta})=>{s.courses=s.courses.map(c=>c._id===meta.arg?{...c,isFeatured:payload.isFeatured}:c);})
+     .addCase(banUser.fulfilled,          (s,{payload})=>{s.users=s.users.map(u=>u._id===payload?{...u,isBanned:true}:u);})
+     .addCase(unbanUser.fulfilled,        (s,{payload})=>{s.users=s.users.map(u=>u._id===payload?{...u,isBanned:false}:u);})
      .addCase(fetchPendingPay.fulfilled,  (s,{payload})=>{s.payments=payload;})
      .addCase(reviewPayment.fulfilled,    (s,{payload})=>{s.payments=s.payments.filter(p=>p._id!==payload);})
      .addCase(fetchRevenue.fulfilled,     (s,{payload})=>{s.revenue=payload;});

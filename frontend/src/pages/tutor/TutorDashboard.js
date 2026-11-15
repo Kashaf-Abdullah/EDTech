@@ -51,7 +51,7 @@ export default function TutorDashboard() {
                 <tr key={c._id}>
                   <td><div className="d-flex align-items-center gap-2"><img src={c.thumbnail||'https://placehold.co/50x35?text=C'} width={50} height={35} style={{objectFit:'cover',borderRadius:6}} alt=""/><span className="fw-medium">{c.title}</span></div></td>
                   <td>PKR {c.price?.toLocaleString()}</td>
-                  <td>{c.totalStudents||0}</td>
+                  <td>{c.enrolledCount??0}</td>
                   <td><span className={`badge bg-${!c.isApproved?'warning':c.isPublished?'success':'secondary'}`}>{!c.isApproved?'Pending Approval':c.isPublished?'Published':'Draft'}</span></td>
                   <td><div className="d-flex gap-1">
                     <Link to={`/tutor/courses/${c._id}`} className="btn btn-sm btn-outline-primary">Manage</Link>

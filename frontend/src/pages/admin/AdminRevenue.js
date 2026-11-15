@@ -14,11 +14,11 @@ export default function AdminRevenue() {
       </div>
       <h5>Transaction History</h5>
       <div className="table-responsive"><table className="table table-hover">
-        <thead className="table-light"><tr><th>Student</th><th>Course</th><th>Amount</th><th>Platform Fee</th><th>Tutor Earning</th><th>Method</th><th>Date</th></tr></thead>
+        <thead className="table-light"><tr><th>Student</th><th>Course / Entry Test</th><th>Amount</th><th>Platform Fee</th><th>Tutor Earning</th><th>Method</th><th>Date</th></tr></thead>
         <tbody>{revenue.map(p=>(
           <tr key={p._id}>
             <td>{p.student?.name}</td>
-            <td>{p.course?.title}</td>
+            <td>{p.course?.title || (p.entryTest ? `📝 ${p.entryTest.title}` : '—')}</td>
             <td>PKR {p.amount?.toLocaleString()}</td>
             <td className="text-success">PKR {p.platformFee?.toLocaleString()}</td>
             <td>PKR {p.tutorEarning?.toLocaleString()}</td>

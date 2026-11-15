@@ -38,9 +38,11 @@ export default function TutorProfile() {
     Object.entries(f).forEach(([k,v])=>fd.append(k,v));
     fd.append('education', JSON.stringify(education.filter(ed=>ed.degree||ed.institution)));
     if(pic)fd.append('profilePic',pic);
-    await dispatch(updateTutorProfile(fd));
-    setOk(true);
-    setTimeout(()=>setOk(false),3000);
+    const res = await dispatch(updateTutorProfile(fd));
+    if (!res.error) {
+      setOk(true);
+      setTimeout(()=>setOk(false),3000);
+    }
   };
 
   const doLogout=()=>{ if(window.confirm('Are you sure you want to logout?')){dispatch(logout());navigate('/login');} };

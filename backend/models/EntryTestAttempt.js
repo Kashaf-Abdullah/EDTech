@@ -7,6 +7,7 @@ const attemptSchema = new mongoose.Schema({
   score: { type: Number, default: 0 },
   totalQuestions: { type: Number, default: 0 },
   percentage: { type: Number, default: 0 },
+  isFreeOnly: { type: Boolean, default: false },
   completedAt: { type: Date, default: Date.now },
   status: { type: String, enum: ['in_progress', 'completed'], default: 'in_progress' },
 }, { timestamps: true });
