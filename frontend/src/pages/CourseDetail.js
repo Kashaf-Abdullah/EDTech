@@ -1,21 +1,32 @@
 import React,{useEffect,useState} from 'react';
-import {useParams,Link,useNavigate} from 'react-router-dom';
+import {useParams,Link} from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux';
 import {fetchCourseById,fetchReviews,addReview,clearSelected} from '../redux/slices/courseSlice';
 import {checkEnrollment} from '../redux/slices/enrollSlice';
+
 export default function CourseDetail() {
-  const {id}=useParams(),dispatch=useDispatch(),navigate=useNavigate();
+  const {id}=useParams(),dispatch=useDispatch();
   const {selected:course,loading,reviews}=useSelector(s=>s.course);
   const {user}=useSelector(s=>s.auth);
   const {isEnrolled}=useSelector(s=>s.enroll);
   const [rv,setRv]=useState({rating:5,comment:''});
   const [copied,setCopied]=useState(false);
-  useEffect(()=>{ dispatch(fetchCourseById(id));dispatch(fetchReviews(id));if(user)dispatch(checkEnrollment(id));return()=>dispatch(clearSelected()); },[dispatch,id,user]);
+  const [previewLesson,setPreviewLesson]=useState(null);
+
+  useEffect(()=>{
+    dispatch(fetchCourseById(id));
+    dispatch(fetchReviews(id));
+    if(user?.role==='student') dispatch(checkEnrollment(id));
+    return()=>dispatch(clearSelected());
+  },[dispatch,id,user]);
+
   if(loading&&!course) return <div className="text-center py-5"><div className="spinner-border text-primary"/></div>;
   if(!course) return null;
+
   const allLessons=[...course.lessons||[],...(course.sections||[]).flatMap(s=>s.lessons||[])];
   const courseLink = `${window.location.origin}/courses/${id}`;
   const copyLink = () => { navigator.clipboard.writeText(courseLink); setCopied(true); setTimeout(()=>setCopied(false),2000); };
+
   return (
     <div className="container py-4">
       <div className="row g-4">
@@ -45,9 +56,13 @@ export default function CourseDetail() {
           {course.whatYouLearn?.length>0 && <div className="mb-4"><h5>What you'll learn</h5><ul>{course.whatYouLearn.map((w,i)=><li key={i}>{w}</li>)}</ul></div>}
           <h5>Course Content ({allLessons.length} lessons)</h5>
           <div className="list-group mb-4">
-            {allLessons.map((l,i)=><div key={l._id} className="list-group-item d-flex justify-content-between">
+            {allLessons.map((l,i)=><div key={l._id||i} className="list-group-item d-flex justify-content-between align-items-center gap-2">
               <span>{i+1}. {l.title} <span className="badge bg-light text-dark ms-1">{l.type}</span></span>
-              {l.isFree?<span className="badge bg-success">Free</span>:<span className="text-muted small">🔒 Paid</span>}
+              {l.isFree
+                ? (l.url
+                    ? <button type="button" className="btn btn-sm btn-success" onClick={()=>setPreviewLesson(l)}>▶ Free Preview</button>
+                    : <span className="badge bg-success">Free</span>)
+                : <span className="text-muted small">🔒 Paid</span>}
             </div>)}
           </div>
           <h5>Reviews ({reviews.length})</h5>
@@ -69,14 +84,41 @@ export default function CourseDetail() {
               <h3 className="text-primary mb-3">PKR {course.price?.toLocaleString()}</h3>
               {isEnrolled
                 ? <Link to={`/learn/${course._id}`} className="btn btn-success btn-lg w-100">▶ Continue Learning</Link>
-                : user
+                : !user
+                ? <Link to="/login" className="btn btn-primary btn-lg w-100">Login to Enroll</Link>
+                : user.role === 'student'
                 ? <Link to={`/checkout/${course._id}`} className="btn btn-primary btn-lg w-100">Enroll Now</Link>
-                : <Link to="/login" className="btn btn-primary btn-lg w-100">Login to Enroll</Link>}
+                : <div className="alert alert-light border small mb-0">Logged in as <strong>{user.role}</strong>. Switch to a student account to enroll.</div>}
               <p className="text-muted small mt-2">✅ Lifetime access · ✅ Certificate · ✅ Urdu support</p>
             </div>
           </div>
         </div>
       </div>
+
+      {previewLesson && (
+        <div className="modal d-block" style={{background:'rgba(0,0,0,0.6)'}} onClick={()=>setPreviewLesson(null)}>
+          <div className="modal-dialog modal-lg modal-dialog-centered" onClick={e=>e.stopPropagation()}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Free Preview: {previewLesson.title}</h5>
+                <button type="button" className="btn-close" onClick={()=>setPreviewLesson(null)}/>
+              </div>
+              <div className="modal-body">
+                {previewLesson.type === 'pdf' ? (
+                  <div>
+                    <iframe src={previewLesson.url} title={previewLesson.title} style={{width:'100%',height:'65vh',border:0}}/>
+                    <div className="mt-2 text-end">
+                      <a href={previewLesson.url} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-primary">Open PDF in New Tab</a>
+                    </div>
+                  </div>
+                ) : (
+                  <video src={previewLesson.url} controls autoPlay className="w-100 rounded" style={{maxHeight:'65vh'}}/>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

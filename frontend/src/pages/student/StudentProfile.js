@@ -23,9 +23,11 @@ export default function StudentProfile() {
     const fd = new FormData();
     fd.append('name', name);
     if (pic) fd.append('profilePic', pic);
-    await dispatch(updateMyProfile(fd));
-    setOk(true);
-    setTimeout(() => setOk(false), 3000);
+    const res = await dispatch(updateMyProfile(fd));
+    if (!res.error) {
+      setOk(true);
+      setTimeout(() => setOk(false), 3000);
+    }
   };
 
   const doLogout = () => {

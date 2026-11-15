@@ -26,7 +26,7 @@ export default function PublicNavbar() {
         <nav className={`pub-nav-links ${open ? 'open' : ''}`}>
           <Link to="/courses" onClick={() => setOpen(false)}>Courses</Link>
           <Link to="/tutors" onClick={() => setOpen(false)}>Tutors</Link>
-          {user && <Link to="/entry-tests" onClick={() => setOpen(false)}>Entry Tests</Link>}
+          {user?.role === 'student' && <Link to="/entry-tests" onClick={() => setOpen(false)}>Entry Tests</Link>}
           {!user ? (
             <>
               <Link to="/login" onClick={() => setOpen(false)} className="pub-nav-login">Login</Link>

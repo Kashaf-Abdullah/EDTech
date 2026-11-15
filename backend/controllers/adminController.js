@@ -35,7 +35,8 @@ exports.getUsers = async (req, res, next) => {
 
 exports.banUser = async (req, res, next) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, { isBanned: true }, { new:true });
+    const user = await User.findByIdAndUpdate(req.params.id, { isBanned: true }, { new:true }).select('-password');
+    if (!user) return res.status(404).json({ success:false, message:'User not found' });
     await notify(user._id, 'Account Suspended', 'Your account has been banned by admin. Contact support for details.', 'system');
     res.json({ success:true, user });
   } catch(err) { next(err); }
@@ -43,7 +44,8 @@ exports.banUser = async (req, res, next) => {
 
 exports.unbanUser = async (req, res, next) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, { isBanned: false }, { new:true });
+    const user = await User.findByIdAndUpdate(req.params.id, { isBanned: false }, { new:true }).select('-password');
+    if (!user) return res.status(404).json({ success:false, message:'User not found' });
     await notify(user._id, 'Account Restored', 'Your account has been unbanned. Welcome back!', 'system');
     res.json({ success:true, user });
   } catch(err) { next(err); }
@@ -129,7 +131,7 @@ exports.featureCourse = async (req, res, next) => {
 
 exports.getRevenueData = async (req, res, next) => {
   try {
-    const payments = await Payment.find({ status:'approved' }).sort('-createdAt').populate('course','title').populate('student','name');
+    const payments = await Payment.find({ status:'approved' }).sort('-createdAt').populate('course','title').populate('entryTest','title').populate('student','name');
     res.json({ success:true, payments });
   } catch(err) { next(err); }
 };

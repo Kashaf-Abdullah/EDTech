@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+
 const paymentSchema = new mongoose.Schema({
   student:      { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   course:       { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
   entryTest:    { type: mongoose.Schema.Types.ObjectId, ref: 'EntryTest' },
-  tutor:        { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  tutor:        { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   amount:       { type: Number, required: true },
   platformFee:  { type: Number, default: 0 },
   tutorEarning: { type: Number, default: 0 },
@@ -17,4 +18,5 @@ const paymentSchema = new mongoose.Schema({
   reviewedAt:     Date,
   reviewedBy:     { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
+
 module.exports = mongoose.model('Payment', paymentSchema);
