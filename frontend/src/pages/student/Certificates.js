@@ -7,7 +7,7 @@ export default function Certificates() {
   useEffect(()=>{ dispatch(fetchCertificates()); },[dispatch]);
   return (
     <div className="container py-4">
-      <h4 className="mb-4">My Certificates 🏆</h4>
+      <h4 className="mb-4">My Certificates </h4>
       {certificates.length===0
         ? <div className="text-center py-5 text-muted"><div className="fs-1 mb-2">📜</div><p>Complete a course to earn your certificate!</p></div>
         : <div className="row g-4">
